@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 //Send HTML como resultado
 
 app.get("/",(req,res)=>{
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(__dirname + "/SitioRespJoaoHernandez.html");
 });
 
 
@@ -60,6 +60,30 @@ app.post("/add", async (req,res) => {
        // }
    // })
 //})
+
+// Create a route to handle user deletion by ID
+app.delete('/delete', async (req, res) => {
+    try {
+      const name = req.params.name;
+  
+      // Check if the user with the given ID exists
+      const user = await User.findById(name);
+  
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+  
+      // Delete the user
+      await User.findByIdAndDelete(name);
+      console.log("Usuario eliminado exitosamente");
+        res.redirect("/");
+  
+      res.status(204).json(); // 204 No Content response for successful deletion
+    } catch (error) {
+        console.error("Error insertando el documente:", err);
+        res.status(500).send("Error agregando usuario"); 
+    }
+});
 
 //Escuchar el servidor
 
